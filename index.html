@@ -1,20 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>City Boy Petz</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <header>
-    <h1>City Boy Petz</h1>
+  <!-- Top Bar (optional brand strip) -->
+  <header class="topbar">
+    <div class="wrap">
+      <span class="brand">City Boy Petz</span>
+    </div>
   </header>
 
-  <main>
-    <p></p>
-    <button onclick="sayHello()">Click Me</button>
-  </main>
+  <!-- HERO with background logo -->
+  <section class="hero" role="banner" aria-label="City Boy Petz">
+    <div class="hero-content">
+      <h1>Book a Show with Us!</h1>
+      <p>Live Animal Education &amp; Entertainment</p>
+      <a href="#contact" class="btn">Book Now</a>
+    </div>
+  </section>
 
-  <script src="script.js"></script>
+  <!-- Mobile Menu -->
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <button id="menu-toggle" class="btn" aria-expanded="false" aria-controls="menu">☰ Menu</button>
+    <ul id="menu" class="hidden">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- About -->
+  <section class="about" id="about">
+    <h2>Who We Are</h2>
+    <p>City Boy Petz brings the excitement of reptiles and exotic pets to your school, party, or event — combining learning, fun, and hands-on interaction.</p>
+  </section>
+
+  <!-- Services -->
+  <section class="services" id="services">
+    <h2>What We Do</h2>
+    <div class="service-cards">
+      <article class="card">
+        <h3>Showcase</h3>
+        <p>Live presentations featuring exotic animals.</p>
+      </article>
+      <article class="card">
+        <h3>Educate</h3>
+        <p>Learn about habitats, behavior, and conservation.</p>
+      </article>
+      <article class="card">
+        <h3>Entertain</h3>
+        <p>Hands-on fun for birthdays, schools, or libraries.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" id="gallery">
+    <h2>Gallery</h2>
+    <div class="images">
+      <img src="images/IMG_9109.JPG" alt="Snake handling demo"/>
+      <img src="images/IMG_9110.JPG" alt="Lizard close-up"/>
+      <img src="images/cityboypetzlogo.PNG" alt="City Boy Petz logo artwork"/>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <h2>What Our Guests Say</h2>
+    <div id="testimonial-box">
+      <p id="testimonial-text">“City Boy Petz made my son’s birthday unforgettable!”</p>
+      <small id="testimonial-author">– Sarah J.</small>
+    </div>
+  </section>
+
+  <!-- Contact / Booking -->
+  <section id="contact" class="contact" aria-labelledby="contact-title">
+    <h2 id="contact-title">Book an Event</h2>
+    <form id="booking-form" novalidate>
+      <input type="text" id="name" name="name" placeholder="Your Name" required />
+      <input type="email" id="email" name="email" placeholder="Your Email" required />
+      <input type="date" id="date" name="date" required />
+      <input type="time" id="time" name="time" required />
+      <textarea id="reason" name="reason" placeholder="Reason for Booking" rows="5" required></textarea>
+      <button type="submit" class="btn">Submit</button>
+    </form>
+    <p id="confirmation" class="hidden" role="status"></p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 City Boy Petz. All Rights Reserved.</p>
+  </footer>
+
+  <!-- Tiny inline script for menu + fake confirmation (optional) -->
+  <script>
+    const toggle = document.getElementById('menu-toggle');
+    const menu = document.getElementById('menu');
+    toggle?.addEventListener('click', () => {
+      const hidden = menu.classList.toggle('hidden');
+      toggle.setAttribute('aria-expanded', String(!hidden));
+    });
+
+    const form = document.getElementById('booking-form');
+    const conf = document.getElementById('confirmation');
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      conf.textContent = "Thanks! Your request has been received. We'll contact you shortly.";
+      conf.classList.remove('hidden');
+      form.reset();
+      window.scrollTo({ top: conf.offsetTop - 100, behavior: 'smooth' });
+    });
+  </script>
 </body>
 </html>
