@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only api/src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node api/src/index.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -28,6 +28,9 @@
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.6.2",
+    "@types/cors": "^2.8.17",
+    "@types/morgan": "^1.9.9",
+    "@types/nodemailer": "^6.4.15",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3"
   }

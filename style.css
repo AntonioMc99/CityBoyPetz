@@ -1,185 +1,95 @@
-:root {
-  --red: #d62014;
-  --black: #000000;
-  --gold: #ffc107;
-  --brown: #5c3a1d;
-  --background: #fff9f0;
-  --text: #1a1a1a;
-}
-
-/* Base */
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: 'Trebuchet MS', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  background-color: var(--background);
-  color: var(--text);
-  line-height: 1.5;
-}
-
-.wrap { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
-
-/* Top bar */
-.topbar {
-  background-color: var(--red);
-  color: #fff;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-}
-.topbar .wrap { display: flex; align-items: center; height: 56px; }
-.brand { font-weight: 800; letter-spacing: .5px; text-transform: uppercase; }
-
-/* HERO with background logo */
-.hero{
-  position:relative;
-  min-height:70vh;
-  display:grid;place-items:center;
-  background:#000 url('images/cityboypetzlogo.PNG') center/cover no-repeat;
-}
-.hero::before{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,.65));
-}
-.hero-content{
-  position:relative;
-  background:transparent;      /* let the logo show through */
-  color:var(--gold);
-  text-align:center;
-  padding:2rem 1.5rem;
-  text-shadow:0 3px 10px rgba(0,0,0,.7);
-  border-radius:12px;
-}
-
-/* Dark overlay for readability */
-.hero::before {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.55));
-}
-
-.hero-content {
-  position: relative; /* sits above overlay */
-  background-color: rgba(0, 0, 0, 0.55);
-  color: var(--gold);
-  padding: 2rem;
-  border-radius: 12px;
-  text-align: center;
-  width: min(680px, 92vw);
-  box-shadow: 0 10px 24px rgba(0,0,0,.35);
-}
-
-.hero-content h1 {
-  margin: 0 0 .5rem 0;
-  font-size: clamp(2rem, 4.5vw, 3rem);
-  text-shadow: 2px 2px var(--black);
-}
-
-.btn {
-  display: inline-block;
-  background-color: var(--gold);
-  color: var(--black);
-  padding: 0.8rem 1.5rem;
-  font-weight: 800;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 1rem;
-  font-size: 1rem;
-  text-decoration: none;
-}
-
-/* Sections */
-section { padding: 3rem 1rem; max-width: 1000px; margin: auto; }
-section h2 { text-align: center; margin-top: 0; }
-
-/* Services */
-.services .service-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.25rem;
-  margin-top: 1rem;
-}
-.card {
-  background: var(--brown);
-  color: var(--gold);
-  padding: 1.5rem;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 0 12px rgba(0,0,0,0.3);
-}
-
-/* Gallery */
-.gallery .images {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
-}
-.gallery img {
-  width: 100%;
-  height: auto;
-  border: 3px solid var(--red);
-  border-radius: 10px;
+/* ---------- IMAGE SANITY: keep pics from blowing up ---------- */
+img { 
+  max-width: 100%; 
+  height: auto; 
   display: block;
 }
 
-/* Mobile Menu */
-.mobile-nav { text-align: center; margin: 1rem 0; }
-.mobile-nav button { font-size: 1.05rem; }
-.mobile-nav ul { list-style: none; padding: 0; margin-top: 1rem; }
-.mobile-nav ul li { margin: 0.5rem 0; }
-.mobile-nav ul li a { text-decoration: none; color: var(--text); font-weight: bold; }
-
-/* Testimonials */
-.testimonials {
-  background-color: #fff;
-  padding: 2rem 1rem;
-  text-align: center;
-  margin-top: 3rem;
-  border-top: 3px solid var(--red);
-}
-#testimonial-box { margin: 1rem auto; max-width: 700px; font-style: italic; }
-
-/* Contact */
-.contact form { display: grid; gap: 1rem; max-width: 700px; margin: 0 auto; }
-.contact input, .contact textarea {
-  padding: 0.85rem;
-  border: 2px solid var(--brown);
-  border-radius: 8px;
-  font-size: 1rem;
-  background: #fff;
-}
-.contact button {
-  background-color: var(--red);
-  color: #fff;
-  padding: 0.9rem 1.25rem;
-  border: none; border-radius: 8px;
-  font-weight: 800; cursor: pointer;
+/* Gallery images: uniform tiles with gentle crop */
+.gallery .images img {
+  width: 100%;
+  aspect-ratio: 4 / 3;    /* consistent tile shape */
+  object-fit: cover;       /* crop instead of stretching */
+  height: auto;            /* keeps AR */
+  border: 3px solid var(--red);
+  border-radius: 10px;
 }
 
-/* Admin table (kept for future) */
-.admin-view { margin-top: 3rem; overflow-x: auto; }
-#bookings-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-#bookings-table th, #bookings-table td {
-  border: 1px solid #ccc;
-  padding: 0.75rem; text-align: left;
+/* About image (if it gets too tall on desktop) */
+.about img, .about .images img {
+  max-height: 420px;
+  object-fit: cover;
 }
-#bookings-table th { background-color: var(--brown); color: var(--gold); }
 
-/* Footer */
-footer {
-  background-color: var(--black);
+/* ---------- HERO CLEANUP: single overlay + smaller on phones ---------- */
+/* Remove duplicates above by overriding here */
+.hero {
+  background: #000 url('images/cityboypetzlogo.PNG') center/cover no-repeat;
+  min-height: 65vh;              /* a little shorter by default */
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.6));
+}
+.hero-content {
+  position: relative;
+  background: rgba(0,0,0,.55);
   color: var(--gold);
+  width: min(700px, 92vw);
+  padding: 1.75rem 1.25rem;
+  border-radius: 12px;
   text-align: center;
-  padding: 1.5rem;
+  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+}
+.hero-content h1 {
+  margin: 0 0 .5rem 0;
+  font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+  text-shadow: 2px 2px var(--black);
 }
 
-/* Utilities */
-.hidden { display: none; }
+/* ---------- MOBILE & TABLET POLISH ---------- */
+@media (max-width: 900px) {
+  .wrap { max-width: 94vw; }
 
-/* Small tweaks for very narrow screens */
-@media (max-width: 420px) {
-  .hero-content { padding: 1.25rem; }
-  .btn { width: 100%; }
+  /* tighter sections */
+  section { padding: 2.5rem 1rem; }
+
+  /* grids → 1 col on smaller screens */
+  .services .service-cards,
+  .gallery .images {
+    grid-template-columns: 1fr;
+    gap: .85rem;
+  }
+
+  /* gallery tiles a bit shorter on small screens */
+  .gallery .images img { aspect-ratio: 16 / 10; }
+
+  /* hero shorter and comfy on phones/tablets */
+  .hero { min-height: 55vh; }
+  .hero-content { padding: 1.25rem 1rem; }
+}
+
+@media (max-width: 600px) {
+  /* buttons full width for easy tapping */
+  .btn { width: 100%; font-size: .95rem; padding: .75rem 1rem; }
+
+  /* input fields stacked */
+  .contact form { gap: .75rem; }
+  .contact input, .contact textarea { font-size: .95rem; }
+
+  /* testimonials & faq smaller text */
+  .testimonials, .faq details { font-size: .95rem; }
+
+  /* footer stack */
+  footer { padding: 1.25rem; }
+}
+
+/* Extra small phones */
+@media (max-width: 380px) {
+  .hero { min-height: 48vh; }
+  .hero-content h1 { font-size: 1.5rem; }
 }

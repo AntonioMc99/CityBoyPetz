@@ -2,6 +2,11 @@
    City Boy Petz — script.js
    ================================ */
 (() => {
+  // ---------- Config ----------
+  // NEW/UPDATED: Point this to your deployed API when ready.
+  // Example: "https://cityboypetz-api.onrender.com/api"
+  const API_BASE = ""; // keep empty for localStorage mode
+
   // ---------- Utilities ----------
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
@@ -16,7 +21,6 @@
       return [];
     }
   };
-
   const writeBookings = (list) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   };
@@ -36,9 +40,11 @@
     });
   };
 
+  // NEW: simple SHA-like key for duplicate detection (date+time)
+  const slotKey = (date, time) => `${date}T${time}`;
+
   // ---------- DOM Ready ----------
   document.addEventListener("DOMContentLoaded", () => {
-    // Form + confirmation
     const form = $("#booking-form");
     const confirmation = $("#confirmation");
 
@@ -63,6 +69,10 @@
       { text: "“Incredible presentation and animal variety!”", author: "– Principal Monroe" },
     ];
 
+    // NEW: prevent past dates on any browser
+    const dateInput = $("#date");
+    if (dateInput) dateInput.min = new Date().toISOString().slice(0, 10);
+
     // ---------- Form Validation ----------
     const validators = {
       name: (v) => v.trim().length >= 2 || "Please enter your full name.",
@@ -72,7 +82,6 @@
         if (!v) return "Please select a date.";
         const today = new Date();
         const chosen = new Date(v + "T00:00:00");
-        // Allow today or future
         if (chosen.setHours(0, 0, 0, 0) < new Date(today.setHours(0, 0, 0, 0)))
           return "Please choose today or a future date.";
         return true;
@@ -82,7 +91,6 @@
     };
 
     const setFieldError = (input, message) => {
-      // ensure or find an error span
       let err = input.nextElementSibling;
       if (!err || !err.classList.contains("field-error")) {
         err = document.createElement("div");
@@ -129,7 +137,6 @@
       if (!el) return;
       el.addEventListener("blur", validateForm);
       el.addEventListener("input", () => {
-        // only clear error as user types
         const rule = validators[id];
         const result = rule ? rule(el.value || "") : true;
         setFieldError(el, result === true ? "" : result);
@@ -137,8 +144,16 @@
     });
 
     // ---------- Bookings Rendering ----------
+    const escapeHTML = (str) =>
+      String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
     const renderBookings = () => {
-      if (!tbody) return; // No admin table on this page
+      if (!tbody) return;
       const bookings = readBookings();
       tbody.innerHTML = "";
       if (!bookings.length) {
@@ -151,7 +166,6 @@
         tbody.appendChild(row);
         return;
       }
-
       bookings.forEach((b, idx) => {
         const row = document.createElement("tr");
         row.innerHTML = `
@@ -160,13 +174,10 @@
           <td>${escapeHTML(b.date)}</td>
           <td>${escapeHTML(b.time)}</td>
           <td>${escapeHTML(b.reason)}</td>
-          <td><button type="button" class="btn btn-small" data-index="${idx}" aria-label="Delete booking ${idx +
-            1}">Delete</button></td>
+          <td><button type="button" class="btn btn-small" data-index="${idx}" aria-label="Delete booking ${idx + 1}">Delete</button></td>
         `;
         tbody.appendChild(row);
       });
-
-      // Hook delete buttons
       $$(".btn.btn-small", tbody).forEach((btn) => {
         btn.addEventListener("click", () => {
           const i = Number(btn.getAttribute("data-index"));
@@ -178,18 +189,43 @@
       });
     };
 
-    // Simple HTML escape for rendering content
-    const escapeHTML = (str) =>
-      String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    // ---------- API helpers (NEW) ----------
+    const apiAvailable = Boolean(API_BASE);
+    const postBooking = async (payload) => {
+      if (!apiAvailable) return { ok: false, reason: "no_api" };
+      try {
+        const res = await fetch(`${API_BASE}/bookings`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          // Try to read server error shape
+          let errText = "Request failed.";
+          try {
+            const data = await res.json();
+            errText = data?.message || data?.error || errText;
+          } catch {}
+          return { ok: false, reason: "http", status: res.status, message: errText };
+        }
+        const data = await res.json().catch(() => ({}));
+        return { ok: true, data };
+      } catch (e) {
+        return { ok: false, reason: "network", message: e?.message || "Network error" };
+      }
+    };
 
     // ---------- Form Submit ----------
     if (form) {
-      form.addEventListener("submit", (e) => {
+      const submitBtn = form.querySelector('button[type="submit"]');
+
+      const setSubmitting = (on) => {
+        if (!submitBtn) return;
+        submitBtn.disabled = on;
+        submitBtn.textContent = on ? "Submitting..." : "Submit";
+      };
+
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
 
@@ -203,13 +239,44 @@
           createdAt: new Date().toISOString(),
         };
 
-        const bookings = readBookings();
-        bookings.push(booking);
-        writeBookings(bookings);
+        // Duplicate check (local)
+        const key = slotKey(booking.date, booking.time);
+        const existing = readBookings();
+        if (existing.some((b) => slotKey(b.date, b.time) === key)) {
+          alert("That date & time is already requested. Please choose another slot.");
+          return;
+        }
+
+        setSubmitting(true);
+
+        // Try API first (if configured)
+        let usedAPI = false;
+        if (apiAvailable) {
+          const res = await postBooking(booking);
+          usedAPI = true;
+          if (!res.ok) {
+            // If server says duplicate, show a friendly message
+            if (res.status === 409) {
+              setSubmitting(false);
+              alert("That date & time is already booked. Please choose another slot.");
+              return;
+            }
+            // Otherwise, fall back to local save
+            console.warn("API error, falling back to local save:", res);
+            usedAPI = false;
+          }
+        }
+
+        // Save locally (always cache local; or if API not available)
+        const list = readBookings();
+        list.push(booking);
+        writeBookings(list);
 
         const nice = formatDateTime(booking.date, booking.time);
         if (confirmation) {
-          confirmation.textContent = `Thanks, ${booking.name}! Your request for ${nice} has been received. We'll reach out by email.`;
+          confirmation.textContent = usedAPI
+            ? `Thanks, ${booking.name}! Your request for ${nice} has been received. We’ll confirm by email.`
+            : `Thanks, ${booking.name}! Your request for ${nice} has been saved locally (offline mode). We’ll reach out by email.`;
           confirmation.classList.remove("hidden");
           confirmation.setAttribute("role", "status");
         }
@@ -217,15 +284,16 @@
         form.reset();
         renderBookings();
 
-        // Smooth scroll to confirmation if off-screen
         if (confirmation) {
           const y = confirmation.getBoundingClientRect().top + window.scrollY - 100;
           window.scrollTo({ top: y, behavior: "smooth" });
         }
+
+        setSubmitting(false);
       });
     }
 
-    // ---------- Export & Clear (optional) ----------
+    // ---------- Export & Clear ----------
     if (exportBtn) {
       exportBtn.addEventListener("click", () => {
         const bookings = readBookings();
@@ -244,7 +312,6 @@
             r
               .map((cell) => {
                 const s = String(cell ?? "");
-                // Quote + escape quotes if needed
                 return /[",\n]/.test(s) ? `"${s.replaceAll('"', '""')}"` : s;
               })
               .join(",")
@@ -277,8 +344,6 @@
         const isHidden = menu.classList.toggle("hidden");
         menuToggle.setAttribute("aria-expanded", String(!isHidden));
       });
-
-      // Close when clicking a link (mobile UX nicety)
       menu.addEventListener("click", (e) => {
         if (e.target.matches("a")) {
           menu.classList.add("hidden");
@@ -304,7 +369,6 @@
       };
       const stop = () => timer && clearInterval(timer);
 
-      // Pause on hover for readability
       const box = $("#testimonial-box");
       if (box) {
         box.addEventListener("mouseenter", stop);

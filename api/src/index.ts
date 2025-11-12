@@ -6,8 +6,9 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import rateLimit from 'express-rate-limit';
-import authRouter from './routes/auth';
-import bookingRouter from './routes/bookings';
+import authRouter from './routes/auth.js';
+import bookingRouter from './routes/bookings.js';
+
 
 const app = express();
 
