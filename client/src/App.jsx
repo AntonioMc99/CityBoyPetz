@@ -1,4 +1,5 @@
 import "./styles.css";
+
 import Navbar from "./components/Navbar.jsx";
 import Hero from "./components/Hero.jsx";
 import CategoryGrid from "./components/CategoryGrid.jsx";
@@ -6,46 +7,31 @@ import Featured from "./components/Featured.jsx";
 import CTA from "./components/CTA.jsx";
 import Footer from "./components/Footer.jsx";
 
-export default function App(){
+// new imports
+import AboutSection from "./components/AboutSection.jsx";
+import ServicesSection from "./components/ServicesSection.jsx";
+import ReviewsSection from "./components/ReviewsSection.jsx";
+import GallerySection from "./components/GallerySection.jsx";
+
+export default function App() {
   return (
     <>
-      <header className="nav">
-        <div className="container nav-inner">
-          <Navbar />
-        </div>
-      </header>
+      <Navbar />
+      <Hero />
 
-      <main>
-        <section className="hero">
-          <div className="container hero-inner">
-            <Hero />
-          </div>
-        </section>
+      {/* New sections */}
+      <AboutSection />
+      <ServicesSection />
 
-        <section className="section">
-          <div className="container">
-            <CategoryGrid />
-          </div>
-        </section>
+      {/* Existing content */}
+      <CategoryGrid />
+      <Featured />
 
-        <section className="section">
-          <div className="container">
-            <Featured />
-          </div>
-        </section>
+      <ReviewsSection />
+      <GallerySection />
 
-        <section className="section">
-          <div className="container">
-            <CTA />
-          </div>
-        </section>
-      </main>
-
-      <footer className="footer">
-        <div className="container">
-          <Footer />
-        </div>
-      </footer>
+      <CTA />
+      <Footer />
     </>
   );
 }
