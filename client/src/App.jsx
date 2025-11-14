@@ -15,23 +15,27 @@ import GallerySection from "./components/GallerySection.jsx";
 
 export default function App() {
   return (
-    <>
+    <div className="app">
       <Navbar />
-      <Hero />
 
-      {/* New sections */}
-      <AboutSection />
-      <ServicesSection />
+      <main>
+        <Hero />
 
-      {/* Existing content */}
-      <CategoryGrid />
-      <Featured />
+        {/* New sections */}
+        <AboutSection />
+        <ServicesSection />
 
-      <ReviewsSection />
-      <GallerySection />
+        {/* Existing content */}
+        <CategoryGrid />
+        <Featured />
 
-      <CTA />
+        <ReviewsSection />
+        <GallerySection />
+
+        <CTA />
+      </main>
+
       <Footer />
-    </>
+    </div>
   );
 }

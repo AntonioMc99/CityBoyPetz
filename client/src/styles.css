@@ -1,169 +1,491 @@
-/* ============================
-   GLOBAL RESET + VIEWPORT FIX
-   ============================ */
-html, body {
+/* =======================
+   ROOT / LAYOUT
+   ======================= */
+
+html,
+body,
+#root {
   margin: 0;
   padding: 0;
   height: 100%;
-  width: 100%;
 }
 
 body {
-  font-family: system-ui, Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
   background: #000;
   color: #fff;
 }
 
-/* ============================
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+main {
+  flex: 1;
+}
+
+/* =======================
    COLOR VARIABLES
-   ============================ */
+   ======================= */
+
 :root {
   --black: #0a0a0a;
   --white: #ffffff;
   --red: #d7263d;
   --yellow: #f2c14e;
   --brown: #7b4b2a;
+  --ink: #111;
 }
 
-/* ============================
-   REUSABLE
-   ============================ */
-.wrap,
-.section-inner {
+/* =======================
+   UTILITIES
+   ======================= */
+
+.container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
+.btn,
+.btn-primary,
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+
 .btn-primary {
   background: var(--red);
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: bold;
-  color: white;
+  color: var(--white);
 }
 
 .btn-outline {
+  background: transparent;
   border: 2px solid var(--yellow);
-  padding: 12px 24px;
-  border-radius: 8px;
   color: var(--yellow);
 }
 
-/* ============================
-   HEADER
-   ============================ */
-.site-header {
+.btn:hover,
+.btn-primary:hover,
+.btn-outline:hover {
+  filter: brightness(1.1);
+}
+
+/* =======================
+   NAVBAR
+   ======================= */
+
+.nav {
+  background: rgba(0, 0, 0, 0.9);
   position: sticky;
   top: 0;
-  background: rgba(0,0,0,0.85);
-  padding: 1rem 0;
+  z-index: 20;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.header-inner {
+.nav-inner {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-/* ============================
-   HERO — FULL SCREEN
-   ============================ */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: var(--yellow);
+}
+
+.logo img {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.nav-links a {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.nav-links a:hover {
+  color: var(--red);
+}
+
+/* mobile hamburger (if you use it in Navbar) */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* =======================
+   HERO SECTION
+   ======================= */
+
 .hero {
-  min-height: 100vh;
-  background: linear-gradient(180deg, #1a1a1a, #000);
+  min-height: 100vh; /* full screen */
+  background: radial-gradient(circle at top, #222, #000);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 5rem 1.5rem 4rem;
+}
+
+.hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
   text-align: center;
 }
 
-.hero-content p {
+.eyebrow {
+  color: var(--yellow);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  margin: 0.5rem 0 1rem;
+}
+
+.hero-subtitle {
   max-width: 600px;
-  margin: 0.5rem auto 2rem auto;
+  margin: 0 auto 2rem;
+  font-size: 1.05rem;
+  opacity: 0.9;
 }
 
 .hero-actions {
   display: flex;
   justify-content: center;
   gap: 1rem;
-}
-
-/* ============================
-   SECTIONS
-   ============================ */
-.section {
-  padding: 4rem 0;
-  background: #0b0b0b;
-}
-
-.section--dark {
-  background: #050505;
-}
-
-.section-title {
-  color: var(--yellow);
-  font-size: 2rem;
+  flex-wrap: wrap;
   margin-bottom: 1.5rem;
 }
 
-/* ============================
-   CARD GRID
-   ============================ */
-.card-grid {
+.hero-badges {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.hero-badges li {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* =======================
+   GENERIC SECTION WRAPPER
+   ======================= */
+
+.section {
+  padding: 4rem 0;
+  background: #0b0b0b;
+  color: #fdfdfd;
+}
+
+.section--alt {
+  background: #050505;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--yellow);
+}
+
+.section-lead {
+  max-width: 600px;
+  margin: 0.5rem auto 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* =======================
+   CATEGORY GRID / SERVICES
+   ======================= */
+
+.section-grid {
+  padding: 4rem 0;
+}
+
+.section-grid .section-title {
+  text-align: center;
+}
+
+.card-grid,
+.section-grid-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.75rem;
 }
 
 .card {
-  background: #151515;
+  background: #141414;
   padding: 1.5rem;
-  border-radius: 14px;
-  border: 1px solid #2b2b2b;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
 }
 
-.card-image-placeholder {
-  height: 150px;
-  border-radius: 12px;
-  background: linear-gradient(135deg,#3b1f0b,#8b4513,#f5c04f);
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  padding-bottom: 0.5rem;
+.card-title {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--yellow);
 }
 
-/* ============================
-   GALLERY
-   ============================ */
-.gallery-grid {
+.card-text {
+  font-size: 0.95rem;
+  color: #d3d3d3;
+}
+
+/* =======================
+   FEATURED SECTION
+   ======================= */
+
+.featured-section {
+  padding: 4rem 0;
+}
+
+.featured-section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.featured-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.featured-card {
+  background: #141414;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* =======================
+   REVIEWS SECTION
+   ======================= */
+
+.reviews-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.review-card {
+  background: #101010;
+  border-radius: 14px;
+  border: 1px solid #2a2a2a;
+  padding: 1.25rem 1.5rem;
+}
+
+.review-text {
+  font-style: italic;
+  margin-bottom: 0.75rem;
+  color: #f5f5f5;
+}
+
+.review-footer {
+  font-size: 0.9rem;
+  color: #ffb84d;
+}
+
+/* =======================
+   GALLERY SECTION
+   ======================= */
+
+.gallery-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1.25rem;
 }
 
-.gallery-tile {
+.gallery-item {
+  position: relative;
   height: 180px;
   border-radius: 16px;
+  overflow: hidden;
   background: radial-gradient(circle at top, #fff1b8, #8b0000);
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  padding: 0.75rem;
 }
 
-/* ============================
-   CONTACT / BOOKING
-   ============================ */
-.booking-form {
-  display: grid;
-  gap: 1rem;
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* ============================
+.gallery-label {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fdfdfd;
+}
+
+/* =======================
+   CTA SECTION
+   ======================= */
+
+.cta {
+  padding: 4rem 0;
+  background: linear-gradient(
+    135deg,
+    rgba(215, 38, 61, 0.2),
+    rgba(123, 75, 42, 0.25)
+  );
+  text-align: center;
+}
+
+.cta-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.cta h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--yellow);
+}
+
+.cta p {
+  max-width: 480px;
+  margin: 0 auto 1.75rem;
+  opacity: 0.95;
+}
+
+/* =======================
    FOOTER
-   ============================ */
+   ======================= */
+
 .footer {
   padding: 3rem 0;
   text-align: center;
+  color: #ccc;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   background: #000;
+}
+
+.footer h3 {
+  color: var(--yellow);
+  font-size: 1.3rem;
+  margin-bottom: 0.25rem;
+}
+
+/* =======================
+   RESPONSIVE
+   ======================= */
+
+@media (max-width: 768px) {
+  .nav-inner {
+    padding-inline: 1rem;
+  }
+
+  .nav-links {
+    display: none; /* if you implement mobile menu, show it there */
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .hero {
+    padding-top: 4.5rem;
+  }
+
+  .hero h1 {
+    font-size: 2.1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn-primary,
+  .hero-actions .btn-outline {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 3rem 0;
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+  }
 }
