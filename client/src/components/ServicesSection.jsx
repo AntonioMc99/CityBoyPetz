@@ -21,12 +21,18 @@ export default function ServicesSection() {
         <h2 className="section-title">What We Do</h2>
         <div className="card-grid">
           {services.map((svc) => (
-            <article key={svc.title} className="card">
-              <div className="carlpartypic.JPG" />
-              <h3 className="card-title">{svc.title}</h3>
-              <p className="card-text">{svc.blurb}</p>
-            </article>
-          ))}
+            <article key={svc.id} className="card">
+  {svc.title === "Birthday Parties" && (
+    <div className="card-image">
+      <img src="/images/carlpartypic.JPG" alt="Kids enjoying a City Boy Petz birthday show" />
+    </div>
+  )}
+  <h3 className="card-title">{svc.title}</h3>
+  <p className="card-text">{svc.blurb}</p>
+</article>
+
+            
+     ))}
         </div>
       </div>
     </section>
