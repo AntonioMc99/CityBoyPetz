@@ -22,7 +22,7 @@ export default function ServicesSection() {
         <div className="card-grid">
           {services.map((svc) => (
             <article key={svc.title} className="card">
-              <div className="card-image-placeholder" />
+              <div className="carlpartypic" />
               <h3 className="card-title">{svc.title}</h3>
               <p className="card-text">{svc.blurb}</p>
             </article>
