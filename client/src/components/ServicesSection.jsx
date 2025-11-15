@@ -1,33 +1,33 @@
 // client/src/components/ServicesSection.jsx
 
-const services = [
-  {
-    id: "school",
-    title: "School Programs",
-    blurb: "Reptile shows for classrooms & assemblies.",
-    image: null,
-  },
-  {
-    id: "birthday",
-    title: "Birthday Parties",
-    blurb: "Hands-on reptile fun for kids.",
-    image: "/images/carlpartypic.JPG", // 👈 your birthday photo
-  },
-  {
-    id: "community",
-    title: "Community Events",
-    blurb: "Large group educational encounters for festivals and fairs.",
-    image: null,
-  },
-  {
-    id: "private",
-    title: "Private Sessions",
-    blurb: "One-on-one or small-group reptile learning experiences.",
-    image: null,
-  },
-];
-
 export default function ServicesSection() {
+  const services = [
+    {
+      id: "school",
+      title: "School Programs",
+      blurb: "Reptile shows for classrooms & assemblies.",
+      image: null,
+    },
+    {
+      id: "birthday",
+      title: "Birthday Parties",
+      blurb: "Hands-on reptile fun for kids.",
+      image: "/images/carlpartypic.JPG", // 👈 EXACT name + .JPG
+    },
+    {
+      id: "community",
+      title: "Community Events",
+      blurb: "Large group educational encounters for festivals & fairs.",
+      image: null,
+    },
+    {
+      id: "private",
+      title: "Private Sessions",
+      blurb: "One-on-one reptile learning experiences.",
+      image: null,
+    },
+  ];
+
   return (
     <section className="section section-light" id="services">
       <div className="section-inner">
@@ -41,6 +41,7 @@ export default function ServicesSection() {
                   <img src={svc.image} alt={svc.title} />
                 </div>
               )}
+
               <h3 className="card-title">{svc.title}</h3>
               <p className="card-text">{svc.blurb}</p>
             </article>

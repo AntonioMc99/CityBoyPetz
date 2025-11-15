@@ -1,6 +1,6 @@
-/* =======================
-   ROOT / LAYOUT
-   ======================= */
+/* =====================================
+   ROOT / GLOBAL LAYOUT
+   ===================================== */
 
 html,
 body,
@@ -28,9 +28,9 @@ main {
   flex: 1;
 }
 
-/* =======================
+/* =====================================
    COLOR VARIABLES
-   ======================= */
+   ===================================== */
 
 :root {
   --black: #0a0a0a;
@@ -41,14 +41,19 @@ main {
   --ink: #111;
 }
 
-/* =======================
-   UTILITIES
-   ======================= */
+/* =====================================
+   UTILITIES / COMMON
+   ===================================== */
 
 .container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 1.5rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 .btn,
@@ -65,6 +70,7 @@ main {
   text-decoration: none;
   cursor: pointer;
   border: none;
+  transition: filter 0.15s ease, transform 0.1s ease;
 }
 
 .btn-primary {
@@ -82,11 +88,12 @@ main {
 .btn-primary:hover,
 .btn-outline:hover {
   filter: brightness(1.1);
+  transform: translateY(-1px);
 }
 
-/* =======================
+/* =====================================
    NAVBAR
-   ======================= */
+   ===================================== */
 
 .nav {
   background: rgba(0, 0, 0, 0.9);
@@ -137,7 +144,7 @@ main {
   color: var(--red);
 }
 
-/* mobile hamburger (if you use it in Navbar) */
+/* mobile hamburger (if used in Navbar) */
 .hamburger {
   display: none;
   background: none;
@@ -147,9 +154,9 @@ main {
   cursor: pointer;
 }
 
-/* =======================
+/* =====================================
    HERO SECTION
-   ======================= */
+   ===================================== */
 
 .hero {
   min-height: 100vh; /* full screen */
@@ -213,9 +220,9 @@ main {
   background: rgba(0, 0, 0, 0.5);
 }
 
-/* =======================
-   GENERIC SECTION WRAPPER
-   ======================= */
+/* =====================================
+   SECTION WRAPPERS
+   ===================================== */
 
 .section {
   padding: 4rem 0;
@@ -225,6 +232,10 @@ main {
 
 .section--alt {
   background: #050505;
+}
+
+.section-light {
+  background: #101010;
 }
 
 .section-header {
@@ -245,9 +256,16 @@ main {
   opacity: 0.9;
 }
 
-/* =======================
+/* used when sections manually wrap content */
+.section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* =====================================
    CATEGORY GRID / SERVICES
-   ======================= */
+   ===================================== */
 
 .section-grid {
   padding: 4rem 0;
@@ -275,6 +293,22 @@ main {
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
 }
 
+/* image block at top of cards (e.g. Birthday Parties) */
+.card-image {
+  width: 100%;
+  height: 220px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .card-title {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
@@ -286,9 +320,9 @@ main {
   color: #d3d3d3;
 }
 
-/* =======================
+/* =====================================
    FEATURED SECTION
-   ======================= */
+   ===================================== */
 
 .featured-section {
   padding: 4rem 0;
@@ -313,9 +347,9 @@ main {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* =======================
+/* =====================================
    REVIEWS SECTION
-   ======================= */
+   ===================================== */
 
 .reviews-grid {
   max-width: 1100px;
@@ -344,9 +378,9 @@ main {
   color: #ffb84d;
 }
 
-/* =======================
+/* =====================================
    GALLERY SECTION
-   ======================= */
+   ===================================== */
 
 .gallery-grid {
   max-width: 1100px;
@@ -390,9 +424,9 @@ main {
   color: #fdfdfd;
 }
 
-/* =======================
+/* =====================================
    CTA SECTION
-   ======================= */
+   ===================================== */
 
 .cta {
   padding: 4rem 0;
@@ -422,9 +456,9 @@ main {
   opacity: 0.95;
 }
 
-/* =======================
+/* =====================================
    FOOTER
-   ======================= */
+   ===================================== */
 
 .footer {
   padding: 3rem 0;
@@ -440,9 +474,9 @@ main {
   margin-bottom: 0.25rem;
 }
 
-/* =======================
+/* =====================================
    RESPONSIVE
-   ======================= */
+   ===================================== */
 
 @media (max-width: 768px) {
   .nav-inner {
@@ -450,7 +484,7 @@ main {
   }
 
   .nav-links {
-    display: none; /* if you implement mobile menu, show it there */
+    display: none; /* show mobile menu instead if you build it */
   }
 
   .hamburger {
