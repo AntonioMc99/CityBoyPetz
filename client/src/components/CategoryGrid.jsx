@@ -1,8 +1,11 @@
 const categories = [
   { title: "School Programs", desc: "Reptile shows for classrooms & assemblies." },
   { title: "Birthday Parties", desc: "Hands-on reptile fun for kids." },
-  { title: "Community Events", desc: "Large group educational encounters." },
-  { title: "Private Sessions", desc: "One-on-one reptile learning experiences." }
+  {
+    title: "ExoHood Ranch",
+    desc: "Offers kids a fun, hands-on farm experience with live animals and simple homesteading activities."
+  },
+  { title: "Live Animal Props", desc: "We provide safe, professional live animals for photoshoots and music videos." }
 ];
 
 export default function CategoryGrid() {

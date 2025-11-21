@@ -12,7 +12,7 @@ export default function ServicesSection() {
       id: "birthday",
       title: "Birthday Parties",
       blurb: "Hands-on reptile fun for kids.",
-      image: "/images/carlpartypic.JPG", // 👈 EXACT name + .JPG
+      image: "public/carlpartypic.JPG"
     },
     {
       id: "community",

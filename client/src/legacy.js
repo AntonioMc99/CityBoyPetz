@@ -40,7 +40,7 @@
     });
   };
 
-  // NEW: simple SHA-like key for duplicate detection (date+time)
+  // simple key for duplicate detection (date+time)
   const slotKey = (date, time) => `${date}T${time}`;
 
   // ---------- DOM Ready ----------
@@ -56,9 +56,9 @@
     const clearBtn = $("#clear-bookings");
     const exportBtn = $("#export-bookings");
 
-    // Mobile menu
+    // Mobile menu (NOTE: ids must match your HTML)
     const menuToggle = $("#menu-toggle");
-    const menu = $("#menu");
+    const menu = $("#mobile-menu"); // <nav id="mobile-menu" class="mobile-menu">
 
     // Testimonials
     const testimonialText = $("#testimonial-text");
@@ -69,7 +69,7 @@
       { text: "“Incredible presentation and animal variety!”", author: "– Principal Monroe" },
     ];
 
-    // NEW: prevent past dates on any browser
+    // prevent past dates
     const dateInput = $("#date");
     if (dateInput) dateInput.min = new Date().toISOString().slice(0, 10);
 
@@ -189,7 +189,7 @@
       });
     };
 
-    // ---------- API helpers (NEW) ----------
+    // ---------- API helpers ----------
     const apiAvailable = Boolean(API_BASE);
     const postBooking = async (payload) => {
       if (!apiAvailable) return { ok: false, reason: "no_api" };
@@ -200,7 +200,6 @@
           body: JSON.stringify(payload),
         });
         if (!res.ok) {
-          // Try to read server error shape
           let errText = "Request failed.";
           try {
             const data = await res.json();
@@ -239,7 +238,6 @@
           createdAt: new Date().toISOString(),
         };
 
-        // Duplicate check (local)
         const key = slotKey(booking.date, booking.time);
         const existing = readBookings();
         if (existing.some((b) => slotKey(b.date, b.time) === key)) {
@@ -249,25 +247,21 @@
 
         setSubmitting(true);
 
-        // Try API first (if configured)
         let usedAPI = false;
         if (apiAvailable) {
           const res = await postBooking(booking);
           usedAPI = true;
           if (!res.ok) {
-            // If server says duplicate, show a friendly message
             if (res.status === 409) {
               setSubmitting(false);
               alert("That date & time is already booked. Please choose another slot.");
               return;
             }
-            // Otherwise, fall back to local save
             console.warn("API error, falling back to local save:", res);
             usedAPI = false;
           }
         }
 
-        // Save locally (always cache local; or if API not available)
         const list = readBookings();
         list.push(booking);
         writeBookings(list);
@@ -338,15 +332,17 @@
       });
     }
 
-    // ---------- Mobile Menu ----------
+    // ---------- Mobile Menu (updated for .mobile-menu.open) ----------
     if (menuToggle && menu) {
       menuToggle.addEventListener("click", () => {
-        const isHidden = menu.classList.toggle("hidden");
-        menuToggle.setAttribute("aria-expanded", String(!isHidden));
+        const isOpen = menu.classList.toggle("open"); // .mobile-menu.open
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
       });
+
+      // close when a link is tapped
       menu.addEventListener("click", (e) => {
         if (e.target.matches("a")) {
-          menu.classList.add("hidden");
+          menu.classList.remove("open");
           menuToggle.setAttribute("aria-expanded", "false");
         }
       });
