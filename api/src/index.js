@@ -1,24 +1,25 @@
 import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
-import bookingsRouter from "./routes/bookings.js";
-
-dotenv.config();
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// simple test route
+// Root route
 app.get("/", (req, res) => {
-  res.json({ message: "CityBoyPetz API is running 🐍" });
+  res.json({ message: "API is running (no database mode)" });
 });
 
-// bookings routes
-app.use("/api/bookings", bookingsRouter);
+// Bookings route placeholder
+app.get("/api/bookings", (req, res) => {
+  res.json([]); // empty list for now
+});
 
-const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI;
+// Start server
+const PORT = process.env.PORT || 4000;
 
+app.listen(PORT, () => {
+  console.log(`🚀 API running on port ${PORT} (no database mode)`);
+});
