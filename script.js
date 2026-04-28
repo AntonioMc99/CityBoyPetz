@@ -9,7 +9,7 @@
 
   // Web3Forms access key — get yours free at https://web3forms.com
   // Enter your email there and paste the key below.
-  const WEB3FORMS_KEY = "YOUR_ACCESS_KEY_HERE";
+  const WEB3FORMS_KEY = "cbd92014-2f3f-4d7e-856f-3a3fdfe5cc47";
 
   // ---------- Utilities ----------
   const $ = (sel, root = document) => root.querySelector(sel);
