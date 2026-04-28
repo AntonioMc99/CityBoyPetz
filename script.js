@@ -3,9 +3,13 @@
    ================================ */
 (() => {
   // ---------- Config ----------
-  // NEW/UPDATED: Point this to your deployed API when ready.
+  // Point this to your deployed API when ready.
   // Example: "https://cityboypetz-api.onrender.com/api"
   const API_BASE = ""; // keep empty for localStorage mode
+
+  // Web3Forms access key — get yours free at https://web3forms.com
+  // Enter your email there and paste the key below.
+  const WEB3FORMS_KEY = "YOUR_ACCESS_KEY_HERE";
 
   // ---------- Utilities ----------
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -189,8 +193,29 @@
       });
     };
 
-    // ---------- API helpers (NEW) ----------
+    // ---------- API helpers ----------
     const apiAvailable = Boolean(API_BASE);
+
+    const notifyWeb3Forms = async (booking) => {
+      const key = WEB3FORMS_KEY;
+      if (!key || key === "YOUR_ACCESS_KEY_HERE") return;
+      const nice = formatDateTime(booking.date, booking.time);
+      try {
+        await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            access_key: key,
+            subject: `New Booking Request — ${booking.name}`,
+            name: booking.name,
+            email: booking.email,
+            message: `Date/Time: ${nice}\n\n${booking.reason}`,
+          }),
+        });
+      } catch (e) {
+        console.warn("Web3Forms notification failed:", e?.message);
+      }
+    };
     const postBooking = async (payload) => {
       if (!apiAvailable) return { ok: false, reason: "no_api" };
       try {
@@ -271,6 +296,9 @@
         const list = readBookings();
         list.push(booking);
         writeBookings(list);
+
+        // Send email notification via Web3Forms
+        notifyWeb3Forms(booking);
 
         const nice = formatDateTime(booking.date, booking.time);
         if (confirmation) {
